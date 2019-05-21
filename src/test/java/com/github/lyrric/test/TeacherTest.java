@@ -3,10 +3,14 @@ package com.github.lyrric.test;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.task.Task;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,12 +24,30 @@ public class TeacherTest {
      */
     public static String TEACHER_NAME = "LiSi";
 
+    Logger logger = LoggerFactory.getLogger(StudentTest.class);
+
     private ProcessEngine processEngine;
 
     TeacherTest(){
         processEngine = ProcessEngines.getDefaultProcessEngine();
     }
 
+    @Test
+    void listTeacherProcess(){
+        List<HistoricVariableInstance> list = processEngine.getHistoryService()
+                .createHistoricVariableInstanceQuery()
+                .variableValueEquals("teacherName", TEACHER_NAME)
+                .list();
+        for (HistoricVariableInstance instance : list) {
+            String info = "id："
+                    .concat(instance.getId())
+                    .concat("，学生：")
+                    .concat(instance.getValue().toString())
+                    .concat("，提交时间：")
+                    .concat(instance.getCreateTime().toString());
+            logger.info(info);
+        }
+    }
     //开始走流程
     @Test
     void getTaskAndComplete(){

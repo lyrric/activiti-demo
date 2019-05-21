@@ -3,6 +3,8 @@ package com.github.lyrric.test;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created on 2019-05-17.
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
  */
 public class DeploymentProcessTest {
 
+    Logger logger = LoggerFactory.getLogger(StudentTest.class);
 
     private ProcessEngine processEngine;
     DeploymentProcessTest(){
@@ -29,8 +32,8 @@ public class DeploymentProcessTest {
                 .addClasspathResource("leaveProcess.png")
                 .deploy();
         //1
-        System.out.println("部署工程id:"+deployment.getId());
+        logger.info("部署工程id:"+deployment.getId());
         //请假流程
-        System.out.println("部署工程name:"+deployment.getName());
+        logger.info("部署工程name:"+deployment.getName());
     }
 }
