@@ -1,11 +1,12 @@
 package com.github.lyrric.test;
 
 import com.github.lyrric.test.constant.SysConstant;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.RuntimeService;
+import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.github.lyrric.test.constant.SysConstant.PROCESS_DEFINITION_KEY;
+import static com.github.lyrric.test.constant.SysConstant.PROCESS_INSTANCE_ID;
 
 /**
  * Created on 2019-05-17.
@@ -35,10 +39,10 @@ public class StudentTest {
     }
 
     /**
-     * 开启一个新的流程
+     * 创建申请
      */
     @Test
-    void startProcess(){
+    void createProcess(){
         RuntimeService runtimeService = processEngine.getRuntimeService();
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
@@ -53,30 +57,42 @@ public class StudentTest {
     }
 
     /**
+     * 提交申请
+     */
+    @Test
+    void complete(){
+        TaskService taskService = processEngine.getTaskService();
+        //获取指定流程ID走到那个步骤
+        Task task = taskService.createTaskQuery()
+                .processInstanceId(PROCESS_INSTANCE_ID)
+                .singleResult();
+        Map<String, Object> map = new HashMap<>();
+        map.put("createTime", "2019年5月22日 10:51:31");
+        if(task.getName().equals("请假申请")){
+            //完成任务
+            taskService.complete(task.getId(), map);
+        }
+    }
+    /**
      * 列出当前用户所有的流程
      */
     @Test
     void listStudentProcess(){
-        List<HistoricVariableInstance> list = processEngine.getHistoryService()
-                .createHistoricVariableInstanceQuery()
-                .variableValueEquals("studentName", STUDENT_NAME)
-                .list();
-        for (HistoricVariableInstance instance : list) {
-            String info = "id："
+        HistoryService historyService = processEngine.getHistoryService();
+        List<HistoricProcessInstance> list = historyService
+                .createHistoricProcessInstanceQuery()
+                .processDefinitionKey(PROCESS_DEFINITION_KEY)
+                .variableValueEquals("studentName", STUDENT_NAME).list();
+
+        for (HistoricProcessInstance instance : list) {
+            Map<String, Object> map = instance.getProcessVariables();
+            StringBuilder info = new StringBuilder("instanceId："
                     .concat(instance.getId())
-                    .concat("，学生：")
-                    .concat(instance.getValue().toString())
                     .concat("，提交时间：")
-                    .concat(instance.getCreateTime().toString());
-            logger.info(info);
+                    .concat(instance.getStartTime().toString()));
+            //map.forEach((key, value)-> info.append(",").append(key).append("：").append(value.toString()));
+            logger.info(info.toString());
         }
     }
 
-    /**
-     * 流程召回（需要手写代码，操作数据库）
-     */
-    @Test
-    void cancelProcess(){
-        processEngine.getRuntimeService();
-    }
 }

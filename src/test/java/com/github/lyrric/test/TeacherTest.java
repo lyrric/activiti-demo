@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.lyrric.test.constant.SysConstant.PROCESS_DEFINITION_KEY;
+
 /**
  * Created on 2019-05-21.
  * 教师
@@ -22,7 +24,7 @@ public class TeacherTest {
     /**
      * 教师名称
      */
-    public static String TEACHER_NAME = "LiSi";
+    private static String TEACHER_NAME = "LiSi";
 
     Logger logger = LoggerFactory.getLogger(StudentTest.class);
 
@@ -32,22 +34,53 @@ public class TeacherTest {
         processEngine = ProcessEngines.getDefaultProcessEngine();
     }
 
+    /**
+     * 查询该教师（LiSi）已处理的流程
+     */
     @Test
-    void listTeacherProcess(){
+    void listTeacherProcessed(){
         List<HistoricVariableInstance> list = processEngine.getHistoryService()
                 .createHistoricVariableInstanceQuery()
                 .variableValueEquals("teacherName", TEACHER_NAME)
                 .list();
         for (HistoricVariableInstance instance : list) {
-            String info = "id："
+            String info = "教师（LiSi）已处理的流程，id："
                     .concat(instance.getId())
-                    .concat("，学生：")
-                    .concat(instance.getValue().toString())
                     .concat("，提交时间：")
                     .concat(instance.getCreateTime().toString());
             logger.info(info);
         }
     }
+
+    /**
+     * 查询走到教师的流程(未处理)
+     */
+
+    @Test
+    void listUnprocessed(){
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> tasks = taskService.createTaskQuery()
+                .processDefinitionKey(PROCESS_DEFINITION_KEY)
+                .taskName("班主任")
+                .list();
+        for (Task task : tasks) {
+            StringBuilder stringBuilder = new StringBuilder("走到教师的流程(未处理)：ProcessInstanceId=，"
+                    .concat(task.getProcessInstanceId())
+                    .concat("，TaskId=")
+                    .concat(task.getId()));
+            Map<String, Object> map = task.getProcessVariables();
+            map.forEach((key, value)->
+                    stringBuilder
+                        .append("，key=")
+                        .append(key)
+                        .append("，value=")
+                        .append(value.toString())
+            );
+            logger.info(stringBuilder.toString());
+        }
+
+    }
+
     //开始走流程
     @Test
     void getTaskAndComplete(){
@@ -58,32 +91,21 @@ public class TeacherTest {
                 .createProcessInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .singleResult() == null){
-            System.out.println("流程已结束");
+            logger.info("流程已结束");
             return ;
         }
         //查询
         Task task = taskService.createTaskQuery()
                 .processInstanceId(processInstanceId)
-                .processVariableValueEquals("studentName", "张三")
+                .taskName("班主任")
+                //.processVariableValueEquals("studentName", "张三")
                 .singleResult();
-        String taskName = task.getName();
-        System.out.println(taskName);
         Map<String, Object> variables = new HashMap<>();
         //完成任务
-        if(taskName.equals("请假申请")){
-            variables.put("applyTime", "s2019年5月21日 11:29:19");
-            System.out.println("职员已经提交申请.......");
-        }else if(taskName.equals("班主任")){
-            variables.put("comment", "王：同意审批");
-            variables.put("teacher", "王老师");
-            System.out.println("王老师已同意审批.......");
-        }else{
-            variables.put("comment", "李：同意审批");
-            variables.put("leader", "李经理");
-            System.out.println("李经理已同意审批.......");
-        }
-
+        variables.put("comment", "王：同意审批");
+        variables.put("teacherName", TEACHER_NAME);
         taskService.complete(task.getId(), variables);
+        logger.info("王老师已同意审批.......");
     }
 
 }
