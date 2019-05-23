@@ -1,10 +1,8 @@
-package com.github.lyrric.test;
+package com.github.lyrric.test.activiti;
 
-import com.github.lyrric.test.constant.SysConstant;
+import com.github.lyrric.test.activiti.constant.SysConstant;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricProcessInstanceQuery;
-import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.junit.jupiter.api.Test;
@@ -15,8 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.lyrric.test.constant.SysConstant.PROCESS_DEFINITION_KEY;
-import static com.github.lyrric.test.constant.SysConstant.PROCESS_INSTANCE_ID;
+import static com.github.lyrric.test.activiti.constant.SysConstant.PROCESS_DEFINITION_KEY;
+import static com.github.lyrric.test.activiti.constant.SysConstant.PROCESS_INSTANCE_ID;
 
 /**
  * Created on 2019-05-17.

@@ -1,4 +1,4 @@
-package com.github.lyrric.test;
+package com.github.lyrric.test.activiti;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;

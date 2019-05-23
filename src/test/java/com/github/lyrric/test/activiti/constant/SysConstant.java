@@ -1,4 +1,4 @@
-package com.github.lyrric.test.constant;
+package com.github.lyrric.test.activiti.constant;
 
 /**
  * Created on 2019-05-21.
