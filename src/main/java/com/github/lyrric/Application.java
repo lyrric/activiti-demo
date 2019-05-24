@@ -1,4 +1,5 @@
 package com.github.lyrric;
+import org.activiti.spring.boot.SecurityAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,7 +11,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  *
  * @author wangxiaodong
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 @MapperScan(basePackages = "com.github.lyrric.mapper")
 public class Application extends SpringBootServletInitializer {
 

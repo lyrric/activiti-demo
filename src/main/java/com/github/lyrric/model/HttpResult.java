@@ -1,11 +1,14 @@
 package com.github.lyrric.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
  * 响应封装
  */
 @Data
+@ApiModel("响应封装")
 public class HttpResult {
     /**
      * 成功代码
@@ -32,21 +35,25 @@ public class HttpResult {
      * 响应码。
      * 如果没有特别注明，code为0时表示请求访问成功
      */
+    @ApiModelProperty("响应码")
     private Integer code;
 
     /**
      * 错误信息
      */
+    @ApiModelProperty("错误信息")
     private String errMsg;
 
     /**
      * 是否成功
      */
+    @ApiModelProperty("是否成功")
     private Boolean success;
 
     /**
      * 响应数据
      */
+    @ApiModelProperty("响应数据")
     private Object data;
 
     private HttpResult(boolean success, int code, String errMsg, Object data) {

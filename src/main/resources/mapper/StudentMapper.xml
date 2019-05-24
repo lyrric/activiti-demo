@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.lyrric.mapper.StudentMapper">
+  <resultMap id="listResultMap" type="com.github.lyrric.model.vo.StudentTaskListVO">
+      <result property="id" column="id" jdbcType="INTEGER" />
+      <result property="studentId" column="student_id"  />
+      <result property="studentName" column="student_name" />
+      <result property="startTime" column="start_time" />
+      <result property="day" column="day"  />
+      <result property="createdTime" column="created_time"/>
+      <result property="status" column="status" />
+      <collection property="taskInsList" ofType="com.github.lyrric.model.vo.StudentTaskListVO$TaskIns">
+          <result column="taskId" property="id"/>
+          <result column="taskName" property="taskName"/>
+          <result column="taskStartTime" property="startTime"/>
+          <result column="taskEndTime" property="endTime"/>
+          <result column="taskStatus" property="status"/>
+      </collection>
+  </resultMap>
+  <select id="list" resultMap="listResultMap">
+      select st.id, st.student_id, st.student_name, st.start_time, st.day, st.created_time, if(hp.END_TIME_ is null, '未完成', '已完成') as status,
+      ht.ID_ as taskId, ht.NAME_ as taskName,ht.START_TIME_ as taskStartTime, ht.END_TIME_ as taskEndTime, if(ht.END_TIME_ is null, '未完成', '已完成') as taskStatus
+      from sys_task st
+      LEFT JOIN act_hi_procinst hp on st.pro_inst_id = hp.PROC_INST_ID_
+      LEFT JOIN act_hi_taskinst ht on st.pro_inst_id = ht.PROC_INST_ID_
+      order by st.id desc
+  </select>
+</mapper>

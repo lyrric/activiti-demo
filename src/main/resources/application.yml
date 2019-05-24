@@ -1,7 +1,9 @@
 spring:
   profiles:
     active: @profileActive@
-
+  activiti:
+      check-process-definitions: false #自动检查、部署流程定义文件
+      database-schema-update: false #自动更新数据库结构
+      jpa-enabled: false
 mybatis:
   mapper-locations:  classpath:mapper/*.xml,classpath:mapper/**/*.xml
-

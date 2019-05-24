@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/api/v1.0/teacher")
-@Api(value = "班主任")
+@Api(description = "班主任")
 public class TeacherController {
 
 
