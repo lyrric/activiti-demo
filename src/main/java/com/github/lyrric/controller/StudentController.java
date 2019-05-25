@@ -38,7 +38,7 @@ public class StudentController {
         studentService.create(startTime, day);
     }
 
-    @ApiOperation(value = "我的申请列表")
+    @ApiOperation(value = "我的申请列表111")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", dataType = "int", paramType = "query", value = "页号", required = true, defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", dataType = "int", paramType = "query", value = "页大小", required = true, defaultValue = "10")
