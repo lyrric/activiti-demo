@@ -38,13 +38,13 @@ public class StudentController {
         studentService.create(startTime, day);
     }
 
-    @ApiOperation(value = "列表")
+    @ApiOperation(value = "我的申请列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", dataType = "int", paramType = "query", value = "页号", required = true, defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", dataType = "int", paramType = "query", value = "页大小", required = true, defaultValue = "10")
     })
     @GetMapping(value = "/list")
-    PageResult<StudentTaskListVO> create(Integer pageNum, Integer pageSize){
+    PageResult<StudentTaskListVO> list(Integer pageNum, Integer pageSize){
         return studentService.list(pageNum, pageSize);
     }
 
