@@ -34,7 +34,7 @@ public class StudentController {
             @ApiImplicitParam(name = "day", dataType = "int", paramType = "query", value = "请假天数", required = true, defaultValue = "1")
     })
     @GetMapping(value = "/create")
-    void create(@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime, Integer day){
+    public void create(@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime, Integer day){
         studentService.create(startTime, day);
     }
 
@@ -44,7 +44,7 @@ public class StudentController {
             @ApiImplicitParam(name = "pageSize", dataType = "int", paramType = "query", value = "页大小", required = true, defaultValue = "10")
     })
     @GetMapping(value = "/list")
-    PageResult<StudentTaskListVO> list(Integer pageNum, Integer pageSize){
+    public PageResult<StudentTaskListVO> list(Integer pageNum, Integer pageSize){
         return studentService.list(pageNum, pageSize);
     }
 
