@@ -22,6 +22,7 @@ public interface TeacherService {
     /**
      * 审批流程
      * @param id
+     * @param pass
      */
-    void approval(Integer id) throws BusinessException;
+    void approval(Integer id, boolean pass) throws BusinessException;
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.github.lyrric.mapper.TeacherMapper">
-  <resultMap id="listResultMap" type="com.github.lyrric.model.vo.TeacherTaskListVO">
+<mapper namespace="com.github.lyrric.mapper.LeaderMapper">
+  <resultMap id="listResultMap" type="com.github.lyrric.model.vo.LeaderTaskListVO">
       <result property="id" column="id" jdbcType="INTEGER" />
       <result property="studentId" column="student_id"  />
       <result property="studentName" column="student_name" />
@@ -11,7 +11,7 @@
       <result property="status" column="status" />
   </resultMap>
   <select id="list" resultMap="listResultMap">
-      SELECT
+   SELECT
             st.id,
             st.student_id,
             st.student_name,
@@ -29,7 +29,7 @@
         LEFT JOIN act_hi_procinst hp  ON hp.PROC_INST_ID_ = st.pro_inst_id
         LEFT JOIN act_hi_taskinst ht ON ht.PROC_INST_ID_ = st.pro_inst_id
         WHERE st.pro_inst_id = hp.PROC_INST_ID_
-        AND ht.NAME_ = '班主任'
+        AND ht.NAME_ = '教务处'
         AND st.pro_inst_id IN (
             SELECT DISTINCT
                 (ht.PROC_INST_ID_)
@@ -38,10 +38,10 @@
             LEFT JOIN act_hi_varinst hv ON ht.PROC_INST_ID_ = hv.PROC_INST_ID_
             WHERE
                 (
-                    hv.NAME_ = 'teacherId'
-                    AND hv.LONG_ = #{teacherId}
+                    hv.NAME_ = 'leaderId'
+                    AND hv.LONG_ = #{leaderId}
                 )
-            OR ht.NAME_ = '班主任'
+            OR ht.NAME_ = '教务处'
         )
         ORDER BY st.id DESC
   </select>

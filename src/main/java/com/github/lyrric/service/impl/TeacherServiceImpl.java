@@ -11,7 +11,6 @@ import com.github.pagehelper.PageHelper;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +26,13 @@ import java.util.Map;
 @Service
 public class TeacherServiceImpl implements TeacherService {
     /**
-     * 学生ID
+     * 教师ID
      */
     private final Integer TEACHER_ID = 1;
     /**
-     * 学生名称
+     * 教师名称
      */
-    private final String TEACHER_NAME = "张三";
+    private final String TEACHER_NAME = "张红";
     /**
      * 班主任节点名称
      */
@@ -54,7 +53,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void approval(Integer id) throws BusinessException {
+    public void approval(Integer id, boolean pass) throws BusinessException {
         SysTask sysTask = sysTaskMapper.selectByPrimaryKey(id);
         if(sysTask == null){
             throw new BusinessException("流程不存在");
@@ -74,6 +73,10 @@ public class TeacherServiceImpl implements TeacherService {
         Map<String, Object> var = new HashMap<>(1);
         var.put("teacherId", TEACHER_ID);
         var.put("teacherName", TEACHER_NAME);
-        taskService.complete(task.getId(), var);
+        if(pass) {
+            taskService.complete(task.getId(), var);
+        }else{
+            taskService.resolveTask(task.getId(), var);
+        }
     }
 }

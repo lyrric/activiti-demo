@@ -10,7 +10,7 @@
     <result column="student_name" jdbcType="VARCHAR" property="studentName" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="day" jdbcType="INTEGER" property="day" />
-    <result column="createdTime" jdbcType="TIMESTAMP" property="createdtime" />
+    <result column="createdTime" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="pro_inst_id" jdbcType="VARCHAR" property="proInstId" />
   </resultMap>
   <sql id="Base_Column_List">

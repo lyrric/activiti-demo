@@ -41,10 +41,11 @@ public class TeacherController {
     @ApiOperation(value = "/审批流程")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", dataType = "int", paramType = "query", value = "id", required = true),
+            @ApiImplicitParam(name = "pass", dataType = "bool", paramType = "query", value = "是否通过", required = true, defaultValue = "true")
     })
     @GetMapping(value = "/approval")
-    public void approval(Integer id) throws BusinessException {
-        teacherService.approval(id);
+    public void approval(Integer id, boolean pass) throws BusinessException {
+        teacherService.approval(id, pass);
     }
 
 }

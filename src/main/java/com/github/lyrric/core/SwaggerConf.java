@@ -31,7 +31,7 @@ public class SwaggerConf {
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-                .title("swagger-ui->o(╯□╰)o")
+                .title("工作流demo")
                 .build();
     }
 }
