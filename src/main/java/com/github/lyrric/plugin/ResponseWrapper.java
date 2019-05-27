@@ -50,6 +50,6 @@ public class ResponseWrapper implements ResponseBodyAdvice<Object> {
                 return null;
             }
         }
-        return o;
+        return HttpResult.success(o);
     }
 }
