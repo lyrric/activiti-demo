@@ -1,5 +1,6 @@
 package com.github.lyrric.controller;
 
+import com.github.lyrric.model.BusinessException;
 import com.github.lyrric.model.PageResult;
 import com.github.lyrric.model.vo.StudentTaskListVO;
 import com.github.lyrric.service.StudentService;
@@ -47,5 +48,17 @@ public class StudentController {
     public PageResult<StudentTaskListVO> list(Integer pageNum, Integer pageSize){
         return studentService.list(pageNum, pageSize);
     }
+
+    @ApiOperation(value = "修改并重新提交申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum", dataType = "int", paramType = "query", value = "id", required = true),
+            @ApiImplicitParam(name = "startTime", dataType = "Date", paramType = "query", value = "请假开始时间", required = true, defaultValue = "2019-05-24"),
+            @ApiImplicitParam(name = "day", dataType = "int", paramType = "query", value = "请假天数", required = true, defaultValue = "1")
+    })
+    @GetMapping(value = "/updateAndCommit")
+    public void updateAndCommit(Integer id, Date startTime, int day) throws BusinessException {
+        studentService.updateAndCommit(id, startTime, day);
+    }
+
 
 }

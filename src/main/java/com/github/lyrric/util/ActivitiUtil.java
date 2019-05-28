@@ -73,7 +73,7 @@ public class ActivitiUtil {
      * @param sysTaskId
      * @param userType
      */
-    private void check(int sysTaskId, String userType) throws BusinessException {
+    public void check(int sysTaskId, String userType) throws BusinessException {
         SysTask sysTask = sysTaskMapper.selectByPrimaryKey(sysTaskId);
         if(sysTask == null){
             throw new BusinessException("流程不存在");

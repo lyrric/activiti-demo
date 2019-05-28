@@ -3,12 +3,16 @@ package com.github.lyrric.service.impl;
 import com.github.lyrric.entity.SysTask;
 import com.github.lyrric.mapper.StudentMapper;
 import com.github.lyrric.mapper.SysTaskMapper;
+import com.github.lyrric.model.BusinessException;
 import com.github.lyrric.model.PageResult;
 import com.github.lyrric.model.vo.StudentTaskListVO;
 import com.github.lyrric.service.StudentService;
+import com.github.lyrric.util.ActivitiUtil;
 import com.github.pagehelper.PageHelper;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -40,6 +44,8 @@ public class StudentServiceImpl implements StudentService {
      * 学生名称
      */
     private final String STUDENT_NAME = "张三";
+
+    private final String TASK_NAME = "请假申请";
     @Resource
     private StudentMapper studentMapper;
     @Resource
@@ -48,6 +54,8 @@ public class StudentServiceImpl implements StudentService {
     private RuntimeService runtimeService;
     @Resource
     private TaskService taskService;
+    @Resource
+    private ActivitiUtil activitiUtil;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -80,5 +88,16 @@ public class StudentServiceImpl implements StudentService {
     public PageResult<StudentTaskListVO> list(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return new PageResult<>(studentMapper.list());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAndCommit(Integer id, Date startTime, int day) throws BusinessException {
+        SysTask sysTask = new SysTask();
+        sysTask.setId(id);
+        sysTask.setStartTime(startTime);
+        sysTask.setDay(day);
+        sysTaskMapper.updateByPrimaryKeySelective(sysTask);
+        activitiUtil.completeTask(id, new HashMap<>(0), TASK_NAME);
     }
 }
